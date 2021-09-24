@@ -60,14 +60,24 @@
             return (
               endingPrice <= maximumPrice && production >= minimunProduction
             );
+          })
+          .sort((a, b) => {
+            const { endingPrice: endingPriceA, production: productionA } = a;
+            const { endingPrice: endingPriceB, production: productionB } = b;
+            return endingPriceA - endingPriceB;
           });
         return plantas;
       };
 
       const showPlants = async () => {
-        const { value: minimunProduction } =
+        const { value: maximumPriceInput } =
+          document.querySelector("#pvu-input");
+        maximumPrice = maximumPriceInput;
+        const { value: minimunProductionInput } =
           document.querySelector("#production-input");
-        const { value: maximumPrice } = document.querySelector("#pvu-input");
+        minimunProduction = minimunProductionInput;
+        alert(maximumPrice);
+        alert(minimunProduction);
         const plants = await getLastPlants();
         grid.innerHTML = "";
         plants.forEach(({ endingPrice, id, production, iconUrl }) => {
@@ -92,8 +102,7 @@
             </div>
 
             `;
-            console.log(`Price: ${endingPrice} \n Producción: ${production}`);
-            console.log(url);
+            console.log("alo");
           }
         });
       };
