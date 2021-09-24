@@ -23,3 +23,9 @@ b {
   background-repeat: no-repeat;
   height: 200px;
 }
+
+a {
+  background: #bc63d6 !important;
+  color: white !important;
+  font-size: 23px !important;
+}
