@@ -1,118 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="bootstrap.css" />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <header class="container-fluid py-2">
-      <img src="Logo.png" class="mb-5" width="300" />
 
-      <div class="w-100 d-flex mb-3">
-        <b>Token</b>
-        <img src="token.svg" />
-        <input
-          class="form-control mx-3"
-          id="token-input"
-          placeholder="Ingrese aquí su token"
-        />
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700;800&family=Poppins:wght@300&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="bootstrap.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
 
-      <div class="w-100 d-flex mb-3">
-        <b>PVU Máximo</b>
-        <img src="pvu.svg" />
-        <input class="form-control mx-3" id="pvu-input" value="50" />
-      </div>
-      <div class="w-100 d-flex mb-3">
-        <b>Producción Mínima</b>
-        <img src="le.svg" />
-        <input class="form-control mx-3" id="production-input" value="10" />
-      </div>
+<body>
+  <header class="container-fluid py-2">
+    <img src="Logo.png" class="mb-5" width="300" />
+    <!-- 
+    <div class="w-100 d-flex mb-3">
+      <b>Token</b>
+      <img src="token.svg" />
+      <input class="form-control mx-3" id="token-input" placeholder="Ingrese aquí su token" />
+    </div> -->
 
-      <button class="btn btn-success" onclick="showPlants()">Buscar</button>
-    </header>
+    <div class="w-100  d-flex mb-3">
+      <b>PVU Máximo</b>
+      <img src="pvu.svg" />
+      <input class="form-control mx-3" id="pvu-input" value="50" />
+    </div>
+    <div class="w-100  d-flex mb-3">
+      <b>Producción Mínima</b>
+      <img src="le.svg" />
+      <input class="form-control mx-3" id="production-input" value="10" />
+    </div>
 
-    <div class="grid row"></div>
+    <button class="btn" id="Buscar-Btn" onclick="showPlants()">Buscar</button>
+  </header>
 
-    <script>
-      let token, maximumPrice, minimunProduction;
-      const grid = document.querySelector(".grid");
-      const spinner = `<div class="spinner-border text-success mx-auto mt-5" role="status"></div>`;
+  <div class="grid row"></div>
 
-      const getLastPlants = async () => {
-        try {
-          grid.innerHTML = spinner;
-          const res = await fetch(
-            "https://backend-farm.plantvsundead.com/get-plants-filter-v2?sort=latest&offset=0&limit=1000",
-            {
-              headers: {
-                authorization: `Bearer Token: ${token}`,
-              },
-            }
-          );
+  <script>
+    let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwdWJsaWNBZGRyZXNzIjoiMHhmMDA3N2ZjNGMxMGE0NDQ4OGYwNTZjZTg3NmI1MTgwYjdlMmYzOTJjIiwibG9naW5UaW1lIjoxNjM0ODY2ODI3NDQ2LCJjcmVhdGVEYXRlIjoiMjAyMS0wOS0xMiAxMzo1Mzo0NCIsImlhdCI6MTYzNDg2NjgyN30.r1NIoBxIlemGNCrovYQNPDR3ATkj1f469icdj8JHGPc"
+    let maximumPrice, minimunProduction;
+    const grid = document.querySelector(".grid");
+    const spinner = `<div class="spinner-border text-success mx-auto mt-5" role="status"></div>`;
 
-          let { data: plantas } = await res.json();
+    const getLastPlants = async () => {
+      try {
+        grid.innerHTML = spinner;
+        const res = await fetch(
+          "https://backend-farm.plantvsundead.com/get-plants-filter-v2?sort=latest&offset=0&limit=100",
+          {
+            headers: {
+              authorization: `Bearer Token: ${token}`,
+            },
+          }
+        );
 
-          plantas = plantas
-            .map(({ id, endingPrice, config, iconUrl }) => {
-              const {
-                farm: { le, hours },
-              } = config;
-              const production = (le / hours).toFixed(2);
-              return {
-                id,
-                production,
-                iconUrl,
-                endingPrice,
-              };
-            })
-            .filter(({ endingPrice, config, production }) => {
-              return (
-                endingPrice <= maximumPrice && production >= minimunProduction
-              );
-            })
-            .sort((a, b) => {
-              const { endingPrice: endingPriceA, production: productionA } = a;
-              const { endingPrice: endingPriceB, production: productionB } = b;
-              return endingPriceA - endingPriceB;
-            });
-          return plantas;
-        } catch (e) {
-          grid.innerHTML;
-          alert("Algo salió mal... Asegúrate de haber copiado bien el token");
-        }
-      };
+        let { data: plantas } = await res.json();
 
-      const showPlants = async () => {
-        const { value: maximumPriceInput } =
-          document.querySelector("#pvu-input");
-        maximumPrice = maximumPriceInput;
-        const { value: minimunProductionInput } =
-          document.querySelector("#production-input");
-        minimunProduction = minimunProductionInput;
-        const { value: tokenInput } = document.querySelector("#token-input");
-        token = tokenInput;
+        console.log(plantas)
+        plantas = plantas
+          .map(({ id, endingPrice, config, iconUrl }) => {
+            const {
+              farm: { le, hours },
+            } = config;
+            const production = (le / hours).toFixed(2);
+            const relacionLEByHours = `LE: ${le} / ${hours}`
+            return {
+              id,
+              production,
+              iconUrl,
+              endingPrice,
+              relacionLEByHours
+            };
+          })
+          .filter(({ endingPrice, config, production }) => {
+            return (
+              endingPrice <= maximumPrice && production >= minimunProduction
+            );
+          })
+          .sort((a, b) => {
+            const { endingPrice: endingPriceA, production: productionA } = a;
+            const { endingPrice: endingPriceB, production: productionB } = b;
+            return endingPriceA - endingPriceB;
+          });
+        return plantas;
+      } catch (e) {
+        grid.innerHTML;
+        alert("Algo salió mal... Asegúrate de haber copiado bien el token");
+      }
+    };
 
-        const plants = await getLastPlants();
-        grid.innerHTML = "";
-        plants.forEach(({ endingPrice, id, production, iconUrl }) => {
-          if (
-            endingPrice <= +maximumPrice &&
-            production >= +minimunProduction
-          ) {
-            const url = `https://marketplace.plantvsundead.com/farm#/plant/${id}`;
-            grid.innerHTML += `
+    const showPlants = async () => {
+      const { value: maximumPriceInput } =
+        document.querySelector("#pvu-input");
+      maximumPrice = maximumPriceInput;
+      const { value: minimunProductionInput } =
+        document.querySelector("#production-input");
+      minimunProduction = minimunProductionInput;
+
+      const plants = await getLastPlants();
+      grid.innerHTML = "";
+      plants.forEach(({ endingPrice, id, production, iconUrl, relacionLEByHours }) => {
+        if (
+          endingPrice <= +maximumPrice &&
+          production >= +minimunProduction
+        ) {
+          const url = `https://marketplace.plantvsundead.com/farm#/plant/${id}`;
+          grid.innerHTML += `
 
             <div class="col-12 col-sm-6 col-md-4 col-lg-3  py-2">
-                <div class="card pt-3">
+                <div class="card pt-4 ">
                     <div style="background-image: url(${iconUrl})" class="img-top"  > </div>
-                    <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                        <h5 class="card-title"><img src="pvu.svg" /> ${endingPrice} </h5>
-                        <h5 class="card-title"><img src="le.svg" /> ${production} </h5>
+                    <div class="card-body fw-light">
+                    <h5 class="mb-3 fs-5 text-center" > ${relacionLEByHours} </h5>
+                    <div class="d-flex justify-content-between ">
+                        <h4 class="card-title"><img src="pvu.svg" /> ${endingPrice} </h4>
+                        <h4 class="card-title"><img src="le.svg" /> ${production} </h4>
                     </div>
                     <a href="${url}" target="_blank" class="btn w-100">Ver</a>
                     </div>
@@ -120,10 +125,10 @@
             </div>
 
             `;
-            console.log("alo");
-          }
-        });
-      };
-    </script>
-  </body>
+        }
+      });
+    };
+  </script>
+</body>
+
 </html>
