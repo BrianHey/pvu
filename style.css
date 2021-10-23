@@ -34,14 +34,31 @@ a {
 .card {
   background-color: #1e2b3f !important;
   color: white;
+  transition: all 0.4s;
+  opacity: 0.8;
+}
+
+.card:hover {
+  border: solid 1px;
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .card {
+    opacity: 1;
+  }
+
+  .wallet {
+    font-size: 9px;
+  }
 }
 
 .card a {
-  background: #9ccb56 !important
+  background: #9ccb56 !important;
 }
 
 .card a:hover {
-  background: #799d43  !important
+  background: #799d43 !important;
 }
 
 #Buscar-Btn {
@@ -52,4 +69,18 @@ a {
 
 #Buscar-Btn:hover {
   color: white !important;
+}
+
+.wallet {
+  color: rgba(255, 255, 255, 0.548);
+  transition: all 0.6s;
+  cursor: pointer;
+}
+
+.wallet:hover {
+  color: white;
+}
+
+.parrafo-wallet {
+  color: #b8ee5b;
 }

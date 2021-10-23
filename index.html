@@ -14,9 +14,13 @@
 </head>
 
 <body>
-  <header class="container-fluid py-2 ">
-    0xf0077Fc4C10a44488F056CE876b5180B7e2f392C
-    <img src="Logo.png" class="mb-5" width="300" />
+  <header class="container-fluid px-2 pb-2 ">
+    <span class="bg-transparent border-0 wallet " onclick="copyWallet()">
+      0xd9D9f5C59F10DDfeee133ef29033fA6A8706Af88
+      <img src="copy.svg" class="ms-2">
+    </span>
+    <img src="Logo.png" class="mt-4" width="300" />
+    <h3 style="color: #b8ee5b" class="my-5 fw-bold"> Busca la mejor planta al mejor precio </h3>
     <!-- 
     <div class="w-100 d-flex mb-3">
       <b>Token</b>
@@ -24,21 +28,25 @@
       <input class="form-control mx-3" id="token-input" placeholder="Ingrese aquí su token" />
     </div> -->
 
-    <div class="w-100  d-flex mb-3">
-      <b>PVU Máximo</b>
-      <img src="pvu.svg" />
-      <input class="form-control mx-3" id="pvu-input" value="50" />
-    </div>
-    <div class="w-100  d-flex mb-3">
-      <b>Producción Mínima</b>
-      <img src="le.svg" />
-      <input class="form-control mx-3" id="production-input" value="10" />
+    <div class="container col-12 col-sm-5">
+      <div class=" d-flex mb-3">
+        <b>PVU Máximo</b>
+        <input class="form-control mx-3" id="pvu-input" />
+        <img src="pvu.svg" />
+      </div>
+      <div class=" d-flex mb-3">
+        <b>Producción Mínima</b>
+        <input class="form-control mx-3" id="production-input" />
+        <img src="le.svg" />
+      </div>
     </div>
 
-    <button class="btn" id="Buscar-Btn" onclick="showPlants()">Buscar</button>
+    <button class="btn mb-4" id="Buscar-Btn" onclick="showPlants()">Buscar</button>
   </header>
 
   <div class="grid row"></div>
+
+
 
   <script>
     let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwdWJsaWNBZGRyZXNzIjoiMHhmMDA3N2ZjNGMxMGE0NDQ4OGYwNTZjZTg3NmI1MTgwYjdlMmYzOTJjIiwibG9naW5UaW1lIjoxNjM0ODY2ODI3NDQ2LCJjcmVhdGVEYXRlIjoiMjAyMS0wOS0xMiAxMzo1Mzo0NCIsImlhdCI6MTYzNDg2NjgyN30.r1NIoBxIlemGNCrovYQNPDR3ATkj1f469icdj8JHGPc"
@@ -111,7 +119,7 @@
           const url = `https://marketplace.plantvsundead.com/farm#/plant/${id}`;
           grid.innerHTML += `
 
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3  py-2">
+            <div class="col-12 col-sm-6 col-md-3 col-lg-2  py-2">
                 <div class="card pt-4 ">
                     <div style="background-image: url(${iconUrl})" class="img-top"  > </div>
                     <div class="card-body fw-light">
@@ -129,7 +137,21 @@
         }
       });
     };
+
+    const copyWallet = () => {
+      const wallet = "0xd9D9f5C59F10DDfeee133ef29033fA6A8706Af88"
+      navigator.clipboard.writeText(wallet);
+      // const parrafoWallet = document.querySelector(".parrafo-wallet")
+      // parrafoWallet.classList.remove("d-none")
+      // setTimeout(() => parrafoWallet.classList.add("d-none"), 3000)
+    }
+
+
+
   </script>
+
+
+
 </body>
 
 </html>
